@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-11-18T16:34:01.316Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="EMSXdWc3ReVwlmO6D-s5" version="15.7.0" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-21T05:01:02.338Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="rrvoG9TgahtZW9P4suBv" version="15.7.0" type="github">
   <diagram id="DP45Bo6otqujKw2S8G9s" name="Page-1">
     <mxGraphModel dx="1186" dy="1981" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -192,6 +192,18 @@
         </mxCell>
         <mxCell id="yQemU41DUPoVROMIjODP-4" value="Response&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="695" y="590" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yQemU41DUPoVROMIjODP-5" value="Request" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="180" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yQemU41DUPoVROMIjODP-6" value="Response" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="240" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yQemU41DUPoVROMIjODP-7" value="Request" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="500" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yQemU41DUPoVROMIjODP-8" value="Response" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1085" y="560" width="70" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
