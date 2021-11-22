@@ -1,0 +1,341 @@
+#%RAML 1.0
+title: Retrieve and Consolidate -  Routes and Schedules - API
+description: This RAML will retrieve and consolidate routes and schedules for the jobs
+
+/booking:
+  /{transportType}:
+    /routes:
+      get:
+
+        headers:
+
+          transactionID:
+            required: true
+            type: string
+            example: "hdfshjdh-jxbv859-sjdf7643-3746bbd"
+
+        queryParameters:
+          companyName:
+            required: false
+            type: string
+            example: "fastGo"
+
+          departureLocation:
+            required: false
+            type: string
+            example: "New Delhi"
+
+          destinationLocation:
+            required: false
+            type: string
+            example: "Mumbai"
+            
+        responses:          
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    companyCode:
+                      type: string
+                      example: "TransNational"
+                      required: true
+                    originLocation: 
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          example: "BEN-SG"
+                          required: true
+                        locationDesc:
+                          type: string
+                          example: "Beauna Vista Singapore"
+                          required: true
+                    destinationLocation: 
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          example: "KLG-MY"
+                          required: true
+                        locationDesc:
+                          type: string
+                          example: "Klang Malaysia"
+                          required: true
+                 example:
+                          [
+                            {
+                              "companyCode": "TransNational",
+                              "originLocation": {
+                                "locationCode": "BEN-SG",
+                                "locationDesc": "Beauna Vista Singapore"
+                              }
+                              "destinationLocation": {
+                                "locationCode": "KLG-MY",
+                                "locationDesc": "Klang Malaysia"
+                              }
+                            },
+                            {
+                              "companyCode": "TransNational",
+                              "originLocation": {
+                                "locationCode": "BEN-SG",
+                                "locationDesc": "Beauna Vista Singapore"
+                              }
+                              "destinationLocation": {
+                                "locationCode": "KLG-MY",
+                                "locationDesc": "Klang Malaysia"
+                              }
+                            },
+                            {
+                              "companyCode": "TransNational",
+                              "originLocation": {
+                                "locationCode": "BEN-SG",
+                                "locationDesc": "Beauna Vista Singapore"
+                              }
+                              "destinationLocation": {
+                                "locationCode": "KLG-MY",
+                                "locationDesc": "Klang Malaysia"
+                              }
+                            }
+                          ]
+          400: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 400
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 400,
+                    "message": "Error Message"
+                  }
+          404: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 404
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 404,
+                    "message": "Error Message"
+                  }    
+          500: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 500
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 500,
+                    "message": "Critical Error"
+                  }
+    /schedules:
+      get:
+
+        headers:
+
+          transactionID: 
+            required: true
+            type: string
+            example: "hdfshjdh-jxbv859-sjdf7643-3746bbd"
+
+        queryParameters:
+
+          companyName:
+            type: string
+            example: "fastGo"
+            required: false
+
+          departureLocation:
+            type: string
+            example: "KLG"
+            required: false
+
+          destinationLocation:
+            type: string
+            example: "BG"
+            required: false
+
+          requestTimezone:
+            type: string
+            example: "0800"
+            required: false
+
+        responses:          
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+
+                    companyName:
+                      type: string
+                      example: "TransNational"
+                      required: true
+
+                    availableSeats:
+                      type: number
+                      example: 20
+                      required: true
+
+                    departureDatetime:
+                      type: string
+                      example: "2019-04-30T16:41:41"
+                      required: true
+
+                    travelRoute:
+                      type: object
+                      properties:
+
+                        destinationLocation: 
+                          type: object
+                          properties:
+
+                            locationCode:
+                              type: string
+                              example: "KLG-MY"
+                              required: true
+
+                            locationDesc:
+                              type: string
+                              example: "Klang Malaysia"
+                              required: true
+                        
+                        originLocation: 
+                          type: object
+                          properties:
+
+                            locationCode:
+                              type: string
+                              example: "BEN-SGY"
+                              required: true
+                              
+                            locationDesc:
+                              type: string
+                              example: "Beauna Vista Singapore"
+                              required: true
+                              
+                 example:
+                        [
+                          {
+                            "companyName": "travelTip",
+                            "availableSeats": 20,
+                            "departureDatetime": "2019-04-30T16:41:41",
+                            "travelRoute": {
+                              "destinationLocation": {
+                                "locationCode": "KLG-MY",
+                                "locationDesc": "Klang Malaysia"
+                              },
+                              "originLocation": {
+                                "locationCode": "BEN-SG",
+                                "locationDesc": "Beauna Vista Singapore"
+                              }
+                            }
+                          },
+                            {
+                            "companyName": "fastGo",
+                            "availableSeats": 30,
+                            "departureDatetime": "2019-04-30T18:41:41",
+                            "travelRoute": {
+                              "destinationLocation": {
+                                "locationCode": "KLG-MY",
+                                "locationDesc": "Klang Malaysia"
+                              },
+                              "originLocation": {
+                                "locationCode": "BL-SG",
+                                "locationDesc": "Beauna Vista Singapore"
+                              }
+                            }
+                          }
+                        ]
+
+          400: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 400
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 400,
+                    "message": "Error Message"
+                  }
+          404: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 404
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 404,
+                    "message": "Error Message"
+                  }    
+          500: 
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 500
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 500,
+                    "message": "Critical Error"
+                  }
+                       
+                              
+ 
+                
+
+
+                            
+                        
+                        
