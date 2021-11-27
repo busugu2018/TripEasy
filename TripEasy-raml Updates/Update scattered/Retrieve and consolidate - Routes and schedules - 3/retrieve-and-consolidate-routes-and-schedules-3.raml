@@ -1,0 +1,92 @@
+#%RAML 1.0
+title: Retrieve and Consolidate -  Routes and Schedules - API
+description: This RAML will retrieve and consolidate routes and schedules for the jobs
+
+uses:
+  common: /libraries/common/commonBusiness-library.raml
+
+types:
+    getRoutesResponse: !include /libraries/routes/datatypes/getRoutes-200response-dataType.raml
+    getSchedulesResponse: !include /libraries/schedules/dataTypes/getSchedules-200response-dataType.raml
+    commonError: !include /libraries/common/dataTypes/common-error-dataType.raml
+
+/booking:
+  /{transportType}:
+    /routes:
+      get:
+
+        is:
+          - common.transactionID
+          - common.transactionID
+          - common.departureLocation
+          - common.destinationLocation
+            
+        responses:          
+          200:
+            body:
+              application/json:
+                type: getRoutesResponse
+                example: !include /libraries/routes/examples/getRoutes-200Response-example.json
+
+          400: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/400response-example.json
+
+          404: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/404response-example.json
+   
+          500: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/505response-example.json
+
+
+    /schedules:
+      get:
+
+        is:
+          - common.transactionID
+          - common.transactionID
+          - common.departureLocation
+          - common.destinationLocation
+          - common.requestTimezone
+
+        responses:          
+          200:
+            body:
+              application/json:
+                type: getSchedulesResponse                            
+                example: !include /libraries/schedules/examples/getSchedules-200-response-example.json
+
+          400: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/400response-example.json
+
+          404: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/404response-example.json
+  
+          500: 
+            body:
+              application/json:
+                type: commonError
+                example: !include /libraries/common/examples/505response-example.json
+                       
+                              
+ 
+                
+
+
+                            
+                        
+                        
