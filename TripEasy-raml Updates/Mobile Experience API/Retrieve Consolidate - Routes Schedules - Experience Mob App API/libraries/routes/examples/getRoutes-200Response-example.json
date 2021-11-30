@@ -1,0 +1,30 @@
+
+[
+  {
+    "companyCode": "TransNational",
+    "originLocation": {
+      "locationDesc": "Beauna Vista Singapore"
+    },
+    "destinationLocation": {
+      "locationDesc": "Klang Malaysia"
+    }
+  },
+  {
+    "companyCode": "TransNational",
+    "originLocation": {
+      "locationDesc": "Beauna Vista Singapore"
+    },
+    "destinationLocation": {
+      "locationDesc": "Klang Malaysia"
+    }
+  },
+  {
+    "companyCode": "TransNational",
+    "originLocation": {
+      "locationDesc": "Beauna Vista Singapore"
+    },
+    "destinationLocation": {
+      "locationDesc": "Klang Malaysia"
+    }
+  }
+]
