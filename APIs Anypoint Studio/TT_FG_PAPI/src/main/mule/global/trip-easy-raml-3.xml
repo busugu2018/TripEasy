@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+        <flow name="trip-easy-raml-3-main">
+        <http:listener config-ref="trip-easy-raml-3-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="trip-easy-raml-3-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="trip-easy-raml-3-console">
+        <http:listener config-ref="trip-easy-raml-3-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="trip-easy-raml-3-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+	<flow name="get:\booking\(transportType)\routes:trip-easy-raml-3-config">
+		<ee:transform doc:name="Initializing Variables for requesting routes event">
+            <ee:variables>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+				<ee:set-variable variableName="transactionID"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionID]]></ee:set-variable>
+				<ee:set-variable variableName="departureLocation"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.departureLocation]]></ee:set-variable>
+				<ee:set-variable variableName="destinationLocation"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.destinationLocation]]></ee:set-variable>
+				<ee:set-variable variableName="companyName"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.companyName]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="52cc3fe7-a87d-4e91-a50d-ad52af614d59" />
+		<flow-ref doc:name="Flow Reference" doc:id="92bed1b6-e8a1-4eb1-957d-9e17359e8719" name="tt_fg_papi_getRoutes_ImplementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ce95ffb8-9ac4-4bc0-8677-f8ca7e1ecef4" />
+    </flow>
+    <flow name="get:\booking\(transportType)\routes\schedules:trip-easy-raml-3-config">
+        <ee:transform doc:name="Initializing Variables for requesting schedules event">
+            <ee:variables>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+				<ee:set-variable variableName="transactionID"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionID]]></ee:set-variable>
+				<ee:set-variable variableName="departureLocation"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.departureLocation]]></ee:set-variable>
+				<ee:set-variable variableName="destinationLocation"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.destinationLocation]]></ee:set-variable>
+				<ee:set-variable variableName="companyName"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.companyName]]></ee:set-variable>
+				<ee:set-variable variableName="requestTimezone" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.requestTimezone]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		
+		<logger level="INFO" doc:name="Logger" doc:id="23f3ba83-5265-49e6-bc1e-41f0b37329a3" />
+		<flow-ref doc:name="Flow Reference" doc:id="c7f023a1-da2a-4e33-9b73-88df7d921ded" name="tt_fg_papi_getSchedules_ImplementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b7cdb7c6-2743-4484-8b32-10bde8bf1b8e" />
+    </flow>
+</mule>

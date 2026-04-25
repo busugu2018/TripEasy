@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_dccced93_5396_42d2_bb6c_4f99d0bc2399_Output_Payload = Array<{|  companyName: Number,   departureDate: String,   fromLocation: String,   toLocation: String,   availableSeats: String|}>
+

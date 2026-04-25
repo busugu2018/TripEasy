@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="TT_SAPI_RAML">
+        <http:listener config-ref="trip-easy-raml-4-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="trip-easy-raml-4-config" />
+        <error-handler ref="globalErrorHandlingError_Handler">
+            
+        </error-handler>
+    </flow>
+    <flow name="trip-easy-raml-4-console">
+        <http:listener config-ref="trip-easy-raml-4-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="trip-easy-raml-4-config" />
+		<error-handler ref="globalErrorHandlingError_Handler" />
+    </flow>
+	<sub-flow name="tt_sapi_initializing_request_variable" doc:id="6bebac6c-5da3-432f-97c0-151715ae902b" >
+		<ee:transform doc:name="initialize">
+            <ee:variables>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+                <ee:set-variable variableName="transportCompany"><![CDATA[attributes.uriParams.'transportCompany']]></ee:set-variable>
+				<ee:set-variable variableName="transactionID"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionID]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportCompany)\Routes:trip-easy-raml-4-config">
+		<flow-ref doc:name="Flow Reference" doc:id="3a31f2fa-ec99-4b65-9165-3ee65344dc42" name="tt_sapi_initializing_request_variable"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b8788c5a-adcb-4203-bda3-a0c6042cbd9f" message="Request sent for routes TT sapi transactionID: #[vars.transactionID]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="98a479b1-23c2-4871-b73a-ce30a0723182" name="TT_getRoutes_implementation"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c315a748-f0b6-496f-93e5-2399164526d1" message="Response received for routes TT sapi transactionID: #[vars.transactionID]"/>
+    </flow>
+    <flow name="get:\(transportType)\(transportCompany)\Schedules:trip-easy-raml-4-config">
+		<flow-ref doc:name="Flow Reference" doc:id="aefc3040-f4b1-4d63-9397-a93bfd994d2c" name="tt_sapi_initializing_request_variable"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ae4fe6be-16c4-41a6-8e7e-d40f06f65e68" message="Request sent for schedules TT sapi transactionID: #[vars.transactionID]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="0dd48882-f793-49e2-8e8c-730fb34e6a6d" name="TT_getSchedules_implementation"/>
+		<logger level="INFO" doc:name="Logger1" doc:id="ca24428e-4f6e-49b1-9ba1-f61e7e394465" message="Response received for schedules TT sapi transactionID: #[vars.transactionID]"/>
+    </flow>
+</mule>

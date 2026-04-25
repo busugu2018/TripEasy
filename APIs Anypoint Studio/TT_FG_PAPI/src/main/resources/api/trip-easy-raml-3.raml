@@ -1,0 +1,92 @@
+#%RAML 1.0
+title: Trip Easy RAML 3 
+description: Retieve and consolidate routes and schedules for process API
+
+uses:
+  common: /Library/common/commonBusiness-library.raml
+
+types:
+  getRoutesResponses: !include /Library/routes/datatypes/getRoutes-200response-dataType.raml
+  getSchedulesResponses: !include /Library/schedules/datatypes/getSchedules-200response-dataType.raml
+  commonError: !include /Library/common/datatypes/common-error-dataType.raml
+
+/booking:
+  /{transportType}:
+    /routes:
+      get:
+        is:
+          - common.transactionID
+          - common.companyName
+          - common.departureLocation
+          - common.destinationLocation
+
+        responses:
+          200:
+            body:
+              application/json:
+                type: getRoutesResponses                  
+                example: !include /Library/routes/examples/getRoutes-200Responses.json
+          400:
+            body:
+              application/json:
+                type: commonError
+                example: !include /Library/common/examples/400error.json
+          404:
+            body:
+              application/json:
+                type: commonError
+                example: !include /Library/common/examples/404error.json      
+          500:
+            body:
+              application/json:
+                type: commonError
+                example: !include  /Library/common/examples/500error.json        
+          505:
+            body:
+              application/json:
+                type: commonError 
+                example: !include /Library/common/examples/505error.json
+    
+      /schedules:
+        get:
+          is:
+          - common.transactionID
+          - common.companyName
+          - common.departureLocation
+          - common.destinationLocation
+          - common.requestTimezone          
+
+          responses:
+            200:
+              body:
+                application/json:
+                  type: getSchedulesResponses                    
+                  example: !include /Library/schedules/examples/getSchedules-200Responses.json
+            400:
+              body:
+                application/json:
+                  type: commonError
+                  example: !include /Library/common/examples/400error.json
+            404:
+              body:
+                application/json:
+                  type: commonError
+                  example: !include /Library/common/examples/404error.json      
+            500:
+              body:
+                application/json:
+                  type: commonError
+                  example: !include  /Library/common/examples/500error.json        
+            505:
+              body:
+                application/json:
+                  type: commonError 
+                  example: !include /Library/common/examples/505error.json
+      
+      
+
+
+
+
+
+              

@@ -1,0 +1,14 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8081"
+    path: "/travelTipCall/{serviceType}"
+    
+db:
+  mysql:
+    host: "127.0.0.1"
+    port: "3306"
+    database: "TripEasy"
+    user: "root"
+    password: "Badab00m"
+    

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="tt_fg_papi_getRoutes_ImplementationSub_Flow" doc:id="64b1c046-ca48-4807-b4ec-6df932703096" >
+		<choice doc:name="Choice" doc:id="ee79ed00-5e36-4377-98aa-396c59b45a50" >
+			<when expression='#[vars.companyName == "travelTip"]'>
+				<flow-ref doc:name="Flow Reference" doc:id="261c201d-cbfb-4b09-bfb3-718d2c374302" name="vars_companyName_Flow_travelTip"/>
+				
+			</when>
+			<when expression='#[vars.companyName == "fastGo"]'>
+				<flow-ref doc:name="Flow Reference" doc:id="bac4d064-8ca1-4929-9f3b-c9d4c3231d5e" name="vars_companyName_Flow_fastGo"/>
+				
+			</when>
+			<otherwise >
+				<scatter-gather doc:name="Scatter-Gather" doc:id="607061ba-5053-4137-a7f4-8b184a38b914" >
+					<route >
+						<set-variable value="" doc:name="Set Variable" doc:id="6c594863-38ee-4cfc-b40e-4ff01b128bf7" />
+						<flow-ref doc:name="Flow Reference" doc:id="a1cdc739-b0ed-4858-8b9b-642710c3b71e" name="vars_companyName_Flow_travelTip"/>
+					</route>
+					<route >
+						<set-variable value="" doc:name="Set Variable" doc:id="11afa3b4-04e5-494f-9e89-bd2fa50cb1c7" />
+						<flow-ref doc:name="Flow Reference" doc:id="c4eb2692-cdd5-4afe-bb01-fcb8a3245265" name="vars_companyName_Flow_fastGo"/>
+					</route>
+				</scatter-gather>
+				<logger level="INFO" doc:name="Logger" doc:id="54497b14-4587-4ed9-9f7d-4be56415122d" message="#[payload]"/>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="1f26b6dc-5572-477d-8b0c-8290bc2b768f" />
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="vars_companyName_Flow_travelTip" doc:id="ad41390d-e2c7-41a4-ad7b-345d53ecc16a" >
+		<set-variable value='#["/api/" ++ (vars.companyName default "") ++ p("http.requester.travelTip.routesPath")]' doc:name="Set Variable" doc:id="475a9634-151c-44f1-a942-3d365572d6fd" variableName="resourcePath"/>
+				<ee:cache doc:name="Cache" doc:id="7e57c1c4-a2c5-41e3-a985-da68e4c4b8c9" cachingStrategy-ref="Caching_Strategy">
+					<http:request method="GET" doc:name="Request" doc:id="d3d41d5a-7b46-4348-801e-52a6bf65121f" config-ref="HTTP_Request_configuration_travelTip" path="resourcePath" />
+					<ee:transform doc:name="Transform Message" doc:id="54569889-409d-426d-b597-812e50124cbb">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="ba8e987e-5bbf-4e6a-ac63-907636cee078" />
+				</ee:cache>
+	</sub-flow>
+	<sub-flow name="vars_companyName_Flow_fastGo" doc:id="6b747083-df75-4e2f-a800-93f7c3e6a2c7" >
+		<set-variable value='"/api/" ++ (vars.companyName default "") ++ p("http.requester.travelTip.routesPath")' doc:name="Set Variable" doc:id="c224263d-0a5f-455e-9bd0-ca7432e065b3" variableName="resoucePath"/>
+				<ee:cache doc:name="Cache" doc:id="49135192-ce93-4e32-82b8-b6843656b959" cachingStrategy-ref="Caching_Strategy">
+					<http:request method="GET" doc:name="Request" doc:id="855db386-0ffb-44de-b13b-1787843e8a4b" config-ref="HTTP_Request_configuration_fastGo" path="/api/++#[vars.companyName]++${http.requester.fastGo.routesPath}"/>
+					<ee:transform doc:name="Transform Message" doc:id="49c16501-7519-4d36-9105-f904714e0f36" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="4732ed6d-74e2-432b-8d72-bad34074259c" message="#[payload]"/>
+				</ee:cache>
+	</sub-flow>
+</mule>

@@ -1,0 +1,81 @@
+#%RAML 1.0
+title: Trip Easy RAML 4
+description: This API will fetch Routes and Schedules from TravelTip System API
+
+uses:
+  common: /library/common/commonBusiness-library.raml
+
+types:
+  commonError: !include /library/common/datatypes/commonError-dataType.raml
+  getRoutesDatatypes:
+  getSchedulesDatatypes:
+
+
+/{transportType}: 
+  /{transportCompany}: 
+    /Routes:
+      get:
+        is:
+          - common.transactionIDroutes
+
+        responses:
+          200:
+            body:
+              application/json:
+                type: getRoutesDatatypes
+                example: !include /library/routes/examples/getRoutes-200examples.json
+
+          400:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/404error.json
+          404:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/400error.json
+          500:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/500error.json
+
+    /Schedules:
+      get:
+        is:
+          - common.transactionIDschedules
+          - common.departureLocation
+          - common.destinationLocation
+
+        responses:
+          200:
+            body:
+              application/json:
+                type: getSchedulesDatatypes
+                example: !include /library/schedules/examples/getSchedules-200examples.json
+
+                    
+          400:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/404error.json
+          404:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/400error.json
+          500:
+            body:
+              application/json:
+                type: commonError
+                example: !include /library/common/examples/500error.json
+          
+        
+                      
+
+                            
+
+
+          

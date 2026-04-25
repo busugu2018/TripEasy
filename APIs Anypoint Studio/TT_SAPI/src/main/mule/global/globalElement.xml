@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<http:listener-config name="trip-easy-raml-4-httpListenerConfig">
+        <http:listener-connection host="${http.listener.host}" port="${http.listener.port}" />
+    </http:listener-config>
+    <apikit:config name="trip-easy-raml-4-config" api="trip-easy-raml-4.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<global-property doc:name="Global Property" doc:id="0a211dde-d02c-4dd0-a04a-2fb5f913530a" name="env" value="local" />
+	<configuration-properties doc:name="Configuration properties" doc:id="9d423ba9-9433-4ef5-9927-69942f1b8e9c" file="config/${env}.yaml" />
+	<http:request-config name="TT_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ab62cc26-a055-41c9-844e-5722b492062b" >
+		<http:request-connection host="${http.requester.host}" port="${http.requester.port}" />
+	</http:request-config>
+	<configuration doc:name="Configuration" doc:id="dd0e7082-8502-45c8-a109-2c94c19e9540" defaultErrorHandler-ref="globalErrorHandlingError_Handler" />
+    
+	
+	</mule>

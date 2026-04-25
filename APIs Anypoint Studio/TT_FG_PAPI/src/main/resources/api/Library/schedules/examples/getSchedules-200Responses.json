@@ -1,0 +1,32 @@
+[
+  {
+    "companyName": "travelTip",
+    "availableSeats": 20,
+    "departureDatetime": "2019-04-30T16:41:41",
+    "travelRoute": {
+      "destinationLocation": {
+        "locationCode": "KLG-MY",
+        "locationDest": "Klang Malaysia"
+      },
+      "originLocation": {
+        "locationCode": "BEN-SG",
+        "locationDest": "Beauna Vista Singapore"
+      }
+    }
+  },
+    {
+    "companyName": "fastGo",
+    "availableSeats": 30,
+    "departureDatetime": "2019-04-30T18:41:41",
+    "travelRoute": {
+      "destinationLocation": {
+        "locationCode": "KLG-MY",
+        "locationDest": "Klang Malaysia"
+      },
+      "originLocation": {
+        "locationCode": "BL-SG",
+        "locationDest": "Beauna Vista Singapore"
+      }
+    }
+  }
+]

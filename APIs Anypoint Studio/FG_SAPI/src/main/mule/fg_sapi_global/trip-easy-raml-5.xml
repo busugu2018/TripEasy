@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="fg_sapi_raml">
+        <http:listener config-ref="trip-easy-raml-5-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="trip-easy-raml-5-config" />
+        <error-handler ref="fg_sapi_global_Error_Handling">
+            
+        </error-handler>
+    </flow>
+    <flow name="trip-easy-raml-5-console">
+        <http:listener config-ref="trip-easy-raml-5-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="trip-easy-raml-5-config" />
+		<error-handler ref="fg_sapi_global_Error_Handling" />
+    </flow>
+    <sub-flow name="initializeFlow" doc:id="d383c8e4-cbe5-49cc-bed9-b9b89925bd83" >
+		<ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="transportType"><![CDATA[attributes.uriParams.'transportType']]></ee:set-variable>
+                <ee:set-variable variableName="transportCompany"><![CDATA[attributes.uriParams.'transportCompany']]></ee:set-variable>
+				<ee:set-variable variableName="transactionID"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers.transactionID]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(transportCompany)\Routes:trip-easy-raml-5-config">
+		<flow-ref doc:name="Flow Reference" doc:id="3e225cc9-3942-4bf4-9a85-e98245586b34" name="initializeFlow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b71fe600-0d2f-4372-8d6e-02a9e666d3b9" message="Request received for fastGo SAPI routes transactionID: #[vars.transactionID]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="a4dd3c3e-6b7e-4336-a099-faaf57747f1c" name="fg_sapi_getRoutes_implementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="791a697d-4b9a-452a-83b2-552024172722" message="Request sent for fastGo SAPI routes transactionID: #[vars.transactionID]"/>
+    </flow>
+    <flow name="get:\(transportType)\(transportCompany)\Schedules:trip-easy-raml-5-config">
+		<flow-ref doc:name="Flow Reference" doc:id="8e651a4b-cf3a-46e4-b63e-e2694aad3790" name="initializeFlow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="2d7ae671-558e-4a3d-89f5-b990d5923e32" message="Request received for fastGo SAPI schedules transactionID: #[vars.transactionID]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="c7bd8bd6-f387-4fbc-858d-5683743e8908" name="fg_sapi_getSchedules_implementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="818d4d0e-b223-4b70-9eac-af9658c3d384" message="Request sent for fastGo SAPI schedules transactionID: #[vars.transactionID]"/>
+    </flow>
+</mule>

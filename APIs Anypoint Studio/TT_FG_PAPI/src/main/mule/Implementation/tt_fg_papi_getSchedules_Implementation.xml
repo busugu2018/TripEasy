@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<sub-flow name="tt_fg_papi_getSchedules_ImplementationSub_Flow" doc:id="bb81a44f-332a-4fd6-8b7b-304a43a2cc22" >
+		<choice doc:name="Choice" doc:id="ac83624b-a1e3-46de-a3fb-6cd66a5a9ba2" >
+			<when expression='#[vars.companyName == "travelTip"]' >
+				<ee:cache doc:name="Cache" doc:id="972bb543-e83c-4c4a-a334-86828d748c1c" cachingStrategy-ref="Caching_Strategy">
+					<http:request method="GET" doc:name="Request" doc:id="d5e02954-57f8-4928-921d-e5f2551f2c4d" config-ref="HTTP_Request_configuration_travelTip" path="${http.requester.travelTip.schedulesPath}" />
+					<ee:transform doc:name="Transform Message" doc:id="1aa431b2-83af-4e83-be1d-c25cdf096862" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</ee:cache>
+			</when>
+			<when expression='#[vars.companyName == "fastGo"]' >
+				<ee:cache doc:name="Cache" doc:id="5b0fd232-457a-41ea-8cff-650de63c056e" >
+					<http:request method="GET" doc:name="Request" doc:id="88847f78-e893-49bf-9b71-31e193801062" config-ref="HTTP_Request_configuration_fastGo" path="${http.requester.fastGo.schedulesPath}" />
+					<ee:transform doc:name="Transform Message" doc:id="e0043567-ec84-462c-8675-a19102b5cfce" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</ee:cache>
+			</when>
+			<otherwise >
+				<scatter-gather doc:name="Scatter-Gather" doc:id="bb57ae5e-1beb-47b2-8a5c-2be1686a4b53" />
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

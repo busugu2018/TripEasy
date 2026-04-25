@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<http:listener-config name="trip-easy-raml-3-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="trip-easy-raml-3-config" api="trip-easy-raml-3.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<http:request-config name="HTTP_Request_configuration_travelTip" doc:name="HTTP Request configuration" doc:id="44d1dd66-b227-4e3d-b81e-69514a334c99" >
+		<http:request-connection host="${http.requester.travelTip.host}" port="${http.requester.travelTip.port}" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration_fastGo" doc:name="HTTP Request configuration" doc:id="0d5973cb-5b6f-428f-be40-f34128d5ad1a" >
+		<http:request-connection host="${http.requester.fastGo.host}" port="${http.requester.fastGo.port}" />
+	</http:request-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="5fe0ee0c-86c6-47ba-99ae-152b7bb75597" file="PAPI_Config/${env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="7f99d1ce-a2b2-46d4-bb9a-6866d9081128" name="env" value="local" />
+	
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="0ee58288-50ec-4b2f-85de-79c046b5cbe2" maxEntries="1000" entryTtl="15" entryTtlUnit="MINUTES" expirationInterval="10" />
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="37274615-6628-481e-8755-bf715d7c239d" keyGenerationExpression='#[vars.companyName ++ vars.transportType ++ "routes"]' objectStore="Object_store" />
+	
+	
+	</mule>

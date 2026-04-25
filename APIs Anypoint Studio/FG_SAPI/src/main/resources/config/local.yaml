@@ -1,0 +1,10 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8084"
+  requester: #We are calling http listener of FG External System, so we use FG host, port, and path
+    host: "localhost"
+    port: "8082"
+    routesPath: "/fastGoCall/routes"
+    schedulesPath: "/fastGoCall/schedules"
+    

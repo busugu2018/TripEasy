@@ -1,0 +1,10 @@
+http:
+  listener:
+    host: "localhost"
+    port: "8083"
+  requester: #We are calling http listener of TT External System, so we use TT host, port, and path
+    host: "localhost"
+    port: "8081"
+    routesPath: "/travelTipCall/routes"
+    schedulesPath: "/travelTipCall/schedules"
+    
